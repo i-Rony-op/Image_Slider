@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Slider</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+      }
+
+      .slider-container {
+        width: 800px;
+        height: 500px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .slider {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+      }
+
+      .slide {
+        min-width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ddd;
+      }
+
+      .slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        height: 50px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s;
+      }
+
+      .slider-btn:hover {
+        background-color: rgba(255, 255, 255, 0.9);
+      }
+
+      .prev-btn {
+        left: 20px;
+      }
+
+      .next-btn {
+        right: 20px;
+      }
+
+      .indicators {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+      }
+
+      .indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .indicator.active {
+        background-color: white;
+      }
+
+      .title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+        font-size: 45px;
+      }
+
+      .slider-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slider-wrapper">
+      <h1 class="title">Image Slider</h1>
+      <div class="slider-container">
+        <div class="slider">
+          <div class="slide">
+            <img
+              src="https://images.unsplash.com/photo-1741866987680-5e3d7f052b87?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw3fHx8ZW58MHx8fHx8"
+              alt="Image 1"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="https://plus.unsplash.com/premium_photo-1675006065342-b3deb78b45d5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDR8fHxlbnwwfHx8fHw%3D"
+              alt="Image 2"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="https://images.unsplash.com/photo-1732482124606-697008dab09c?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Image 3"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="https://plus.unsplash.com/premium_photo-1669144690665-17dde1269f68?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDh8fHxlbnwwfHx8fHw%3D"
+              alt="Image 4"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="https://images.unsplash.com/photo-1670909095824-3c7d929b91b5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE1fHx8ZW58MHx8fHx8"
+              alt="Image 5"
+            />
+          </div>
+        </div>
+
+        <button class="slider-btn prev-btn">&#10094;</button>
+        <button class="slider-btn next-btn">&#10095;</button>
+
+        <div class="indicators"></div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.querySelector(".slider");
+        const slides = document.querySelectorAll(".slide");
+        const prevBtn = document.querySelector(".prev-btn");
+        const nextBtn = document.querySelector(".next-btn");
+        const indicatorsContainer = document.querySelector(".indicators");
+
+        let currentIndex = 0;
+        const totalSlides = slides.length;
+
+        // Create indicators
+        for (let i = 0; i < totalSlides; i++) {
+          const indicator = document.createElement("div");
+          indicator.classList.add("indicator");
+          if (i === 0) {
+            indicator.classList.add("active");
+          }
+          indicator.dataset.index = i;
+          indicatorsContainer.appendChild(indicator);
+
+          // Add click event to indicators
+          indicator.addEventListener("click", function () {
+            goToSlide(parseInt(this.dataset.index));
+          });
+        }
+
+        const indicators = document.querySelectorAll(".indicator");
+
+        // Function to update the slider position
+        function updateSlider() {
+          slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+          // Update indicators
+          indicators.forEach((indicator, index) => {
+            if (index === currentIndex) {
+              indicator.classList.add("active");
+            } else {
+              indicator.classList.remove("active");
+            }
+          });
+        }
+
+        // Function to go to a specific slide
+        function goToSlide(index) {
+          currentIndex = index;
+          updateSlider();
+        }
+
+        // Function to go to the next slide
+        function nextSlide() {
+          currentIndex = (currentIndex + 1) % totalSlides;
+          updateSlider();
+        }
+
+        // Function to go to the previous slide
+        function prevSlide() {
+          currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+          updateSlider();
+        }
+
+        // Event listeners for buttons
+        nextBtn.addEventListener("click", nextSlide);
+        prevBtn.addEventListener("click", prevSlide);
+
+        // Keyboard navigation
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowRight") {
+            nextSlide();
+          } else if (e.key === "ArrowLeft") {
+            prevSlide();
+          }
+        });
+
+        // Auto slide (optional - uncomment to enable)
+        // const autoSlideInterval = setInterval(nextSlide, 5000);
+
+        // Stop auto slide on hover (if auto slide is enabled)
+        // slider.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+        // slider.addEventListener('mouseleave', () => autoSlideInterval = setInterval(nextSlide, 5000));
+
+        // Touch events for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slider.addEventListener("touchstart", function (e) {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+
+        slider.addEventListener("touchend", function (e) {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipe();
+        });
+
+        function handleSwipe() {
+          const swipeThreshold = 50;
+          if (touchEndX < touchStartX - swipeThreshold) {
+            nextSlide(); // Swipe left
+          }
+          if (touchEndX > touchStartX + swipeThreshold) {
+            prevSlide(); // Swipe right
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
