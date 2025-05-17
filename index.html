@@ -234,12 +234,12 @@
           }
         });
 
-        // Auto slide (optional - uncomment to enable)
-        // const autoSlideInterval = setInterval(nextSlide, 5000);
+        Auto slide (optional - uncomment to enable)
+        const autoSlideInterval = setInterval(nextSlide, 5000);
 
-        // Stop auto slide on hover (if auto slide is enabled)
-        // slider.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
-        // slider.addEventListener('mouseleave', () => autoSlideInterval = setInterval(nextSlide, 5000));
+        Stop auto slide on hover (if auto slide is enabled)
+        slider.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+        slider.addEventListener('mouseleave', () => autoSlideInterval = setInterval(nextSlide, 5000));
 
         // Touch events for mobile
         let touchStartX = 0;
